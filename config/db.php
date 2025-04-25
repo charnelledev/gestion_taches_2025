@@ -1,13 +1,13 @@
 <?php
-$host = 'localhost';
-$db   = 'gestion_taches_2025';
-$user = 'root';
-$pass = ''; // à adapter
-$charset = 'utf8mb4';
+$host = 'localhost'; // Serveur de base de données
+$dbname = 'gestion_taches_2025'; // Nom de la base de données
+$username = 'root'; // Nom d'utilisateur MySQL
+$password = ''; // Mot de passe MySQL (vide pour XAMPP / WAMP sur certaines configurations)
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Erreur DB : " . $e->getMessage());
+    echo "Connection failed: " . $e->getMessage();
 }
+?>

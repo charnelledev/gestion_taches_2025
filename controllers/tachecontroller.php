@@ -1,20 +1,26 @@
 <?php
-session_start();
-require_once __DIR__ . '/../models/Utilisateur.php';
+class TacheController {
+    private $tacheModel;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['register'])) {
-        Utilisateur::register($_POST['nom'], $_POST['email'], $_POST['mot_de_passe']);
-        header('Location: ../views/login.php');
+    public function __construct($pdo) {
+        $this->tacheModel = new Tache($pdo);
     }
 
-    if (isset($_POST['login'])) {
-        $user = Utilisateur::login($_POST['email'], $_POST['mot_de_passe']);
-        if ($user) {
-            $_SESSION['user'] = $user;
-            header('Location: ../views/dashboard.php');
-        } else {
-            echo "Identifiants incorrects.";
+    public function add() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $titre = $_POST['titre'];
+            $description = $_POST['description'];
+            $type = $_POST['type'];
+            $id_utilisateur = $_SESSION['user_id']; // Assurez-vous que l'utilisateur est connecté
+
+            $this->tacheModel->addTask($titre, $description, $type, $id_utilisateur);
+            header("Location: /tasks.php");
+            exit();
         }
     }
+
+    public function list() {
+        return $this->tacheModel->getTasksByUser($_SESSION['user_id']);
+    }
 }
+?>
